@@ -39,6 +39,10 @@ Button button3 = {
 bool button1_longPressed = false;
 bool button2_longPressed = false;
 
+bool button1_status;
+bool button2_status;
+bool button3_status;  
+
 void Init_Buttons(){
     Menu_Navigate(&MainMenu_LedState);
 }
@@ -56,7 +60,7 @@ void Button1_releaseCallback(void){
 }
 
 bool Button1_getButtonPhyState(void){
-    return false;
+    return button1_status;
 }
 
 void Button2_shortPressCallback(void){
@@ -72,7 +76,7 @@ void Button2_releaseCallback(void){
 }
 
 bool Button2_getButtonPhyState(void){
-    return false;
+    return button2_status;
 }
 
 void Button3_shortPressCallback(void){
@@ -88,5 +92,5 @@ void Button3_releaseCallback(void){
 }
 
 bool Button3_getButtonPhyState(void){
-    return false;
+    return button3_status;
 }

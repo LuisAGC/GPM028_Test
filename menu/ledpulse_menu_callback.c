@@ -1,47 +1,79 @@
 #include <stdio.h>
 
-#include "ledstate_menu_callback.h"
+#include "ledpulse_menu_callback.h"
 #include "../PCD8544_TilePrinter/pcd8544_tileprinter.h"
 #include "../led/led_impl.h"
 #include "MicroMenu.h"
 
-char ledpulse_menu_buffer[21];
+char ledpulse_menu_buffer[15];
 
-const char ledpulse_menu_text[] = "%cLed %d pulse config";
-const char ledpulse_menu_text_array[4][21] = {
-    "%cPulse high: %05u",
-    "%cPulse low:  %05u",
-    "%cPulses:     %05d",
-    "%cPulses:     Inf"
+const char ledpulse_menu_text[] = "%cLed %d P conf";
+const char ledpulse_menu_text_array[4][15] = {
+    "%cP hi: %05u",
+    "%cP lo: %05u",
+    "%cPuls: %05d",
+    "%cPuls: Inf"
 };
 
 
-static inline void LedPulse_Draw_Helper(uint16_t currentLed){
-    char indicatorArray[] = {' ', ' ', ' ', ' '};
-    indicatorArray[currentLed] = '>';
+static inline void LedPulse_TopDraw_Helper(uint16_t currentLed){
     PCD8544_ClearScreen();
-    
-    for(uint16_t i = 0; i < 4; i++){
-        sprintf(ledpulse_menu_buffer, ledpulse_menu_text, indicatorArray[i], i+1);
+    for(uint16_t i = 0; i < 6; i++){
+        if(i == currentLed){
+            sprintf(ledpulse_menu_buffer, ledpulse_menu_text, '>', i+1);
+        }
+        else{
+            sprintf(ledpulse_menu_buffer, ledpulse_menu_text, ' ', i+1);
+        }
         PCD8544_SetAddress(0,i);
         PCD8544_PrintString(ledpulse_menu_buffer);
     }
 }
 
+static inline void LedPulse_BottomDraw_Helper(uint16_t currentLed){
+    PCD8544_ClearScreen();
+    for(uint16_t i = 6; i < 8; i++){
+        if(i == currentLed){
+            sprintf(ledpulse_menu_buffer, ledpulse_menu_text, '>', i+1);
+        }
+        else{
+            sprintf(ledpulse_menu_buffer, ledpulse_menu_text, ' ', i+1);
+        }
+        PCD8544_SetAddress(0,i-6);
+        PCD8544_PrintString(ledpulse_menu_buffer);
+    }
+}
+
 void LedPulse_1_Draw(void){
-    LedPulse_Draw_Helper(0);
+    LedPulse_TopDraw_Helper(0);
 }
 
 void LedPulse_2_Draw(void){
-    LedPulse_Draw_Helper(1);
+    LedPulse_TopDraw_Helper(1);
 }
 
 void LedPulse_3_Draw(void){
-    LedPulse_Draw_Helper(2);
+    LedPulse_TopDraw_Helper(2);
 }
 
 void LedPulse_4_Draw(void){
-    LedPulse_Draw_Helper(3);
+    LedPulse_TopDraw_Helper(3);
+}
+
+void LedPulse_5_Draw(void){
+    LedPulse_TopDraw_Helper(4);
+}
+
+void LedPulse_6_Draw(void){
+    LedPulse_TopDraw_Helper(5);
+}
+
+void LedPulse_7_Draw(void){
+    LedPulse_BottomDraw_Helper(6);
+}
+
+void LedPulse_8_Draw(void){
+    LedPulse_BottomDraw_Helper(7);
 }
     
 
@@ -121,6 +153,59 @@ void LedPulse_4_PulseLow_Draw(void){
 void LedPulse_4_Pulses_Draw(void){
     LedPulseInstance_Draw_Helper(&led4, 2);
 }
+
+
+void LedPulse_5_PulseHigh_Draw(void){
+    LedPulseInstance_Draw_Helper(&led5, 0);
+}
+
+void LedPulse_5_PulseLow_Draw(void){
+    LedPulseInstance_Draw_Helper(&led5, 1);
+}
+
+void LedPulse_5_Pulses_Draw(void){
+    LedPulseInstance_Draw_Helper(&led5, 2);
+}
+
+
+void LedPulse_6_PulseHigh_Draw(void){
+    LedPulseInstance_Draw_Helper(&led6, 0);
+}
+
+void LedPulse_6_PulseLow_Draw(void){
+    LedPulseInstance_Draw_Helper(&led6, 1);
+}
+
+void LedPulse_6_Pulses_Draw(void){
+    LedPulseInstance_Draw_Helper(&led6, 2);
+}
+
+
+void LedPulse_7_PulseHigh_Draw(void){
+    LedPulseInstance_Draw_Helper(&led7, 0);
+}
+
+void LedPulse_7_PulseLow_Draw(void){
+    LedPulseInstance_Draw_Helper(&led7, 1);
+}
+
+void LedPulse_7_Pulses_Draw(void){
+    LedPulseInstance_Draw_Helper(&led7, 2);
+}
+
+
+void LedPulse_8_PulseHigh_Draw(void){
+    LedPulseInstance_Draw_Helper(&led8, 0);
+}
+
+void LedPulse_8_PulseLow_Draw(void){
+    LedPulseInstance_Draw_Helper(&led8, 1);
+}
+
+void LedPulse_8_Pulses_Draw(void){
+    LedPulseInstance_Draw_Helper(&led8, 2);
+}
+
 
 static inline void LedPulse_PulseHighHelper(Led *led, bool increment){
     if(increment == true){
@@ -256,3 +341,98 @@ void LedPulse_4_PulsesDec(void){
 }
 
 
+void LedPulse_5_PulseHighInc(void){
+    LedPulse_PulseHighHelper(&led5, true);
+}
+
+void LedPulse_5_PulseLowInc(void){
+    LedPulse_PulseLowHelper(&led5, true);
+}
+
+void LedPulse_5_PulsesInc(void){
+    LedPulse_PulsesHelper(&led5, true);
+}
+
+void LedPulse_5_PulseHighDec(void){
+    LedPulse_PulseHighHelper(&led5, false);
+}
+
+void LedPulse_5_PulseLowDec(void){
+    LedPulse_PulseLowHelper(&led5, false);
+}
+
+void LedPulse_5_PulsesDec(void){
+    LedPulse_PulsesHelper(&led5, false);
+}
+
+void LedPulse_6_PulseHighInc(void){
+    LedPulse_PulseHighHelper(&led6, true);
+}
+
+void LedPulse_6_PulseLowInc(void){
+    LedPulse_PulseLowHelper(&led6, true);
+}
+
+void LedPulse_6_PulsesInc(void){
+    LedPulse_PulsesHelper(&led6, true);
+}
+
+void LedPulse_6_PulseHighDec(void){
+    LedPulse_PulseHighHelper(&led6, false);
+}
+
+void LedPulse_6_PulseLowDec(void){
+    LedPulse_PulseLowHelper(&led6, false);
+}
+
+void LedPulse_6_PulsesDec(void){
+    LedPulse_PulsesHelper(&led6, false);
+}
+
+void LedPulse_7_PulseHighInc(void){
+    LedPulse_PulseHighHelper(&led7, true);
+}
+
+void LedPulse_7_PulseLowInc(void){
+    LedPulse_PulseLowHelper(&led7, true);
+}
+
+void LedPulse_7_PulsesInc(void){
+    LedPulse_PulsesHelper(&led7, true);
+}
+
+void LedPulse_7_PulseHighDec(void){
+    LedPulse_PulseHighHelper(&led7, false);
+}
+
+void LedPulse_7_PulseLowDec(void){
+    LedPulse_PulseLowHelper(&led7, false);
+}
+
+void LedPulse_7_PulsesDec(void){
+    LedPulse_PulsesHelper(&led7, false);
+}
+
+ void LedPulse_8_PulseHighInc(void){
+    LedPulse_PulseHighHelper(&led8, true);
+}
+
+void LedPulse_8_PulseLowInc(void){
+    LedPulse_PulseLowHelper(&led8, true);
+}
+
+void LedPulse_8_PulsesInc(void){
+    LedPulse_PulsesHelper(&led8, true);
+}
+
+void LedPulse_8_PulseHighDec(void){
+    LedPulse_PulseHighHelper(&led8, false);
+}
+
+void LedPulse_8_PulseLowDec(void){
+    LedPulse_PulseLowHelper(&led8, false);
+}
+
+void LedPulse_8_PulsesDec(void){
+    LedPulse_PulsesHelper(&led8, false);
+}

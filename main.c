@@ -77,11 +77,18 @@ int main(void)
     // initialize the device
     SYSTEM_Initialize();
     INTERRUPT_GlobalDisable();
+    IEC2bits.I2C2BCIE = 0;
     IEC2bits.I2C2MIE = 0;
+    IEC2bits.I2C2SIE = 0;
     INTERRUPT_GlobalEnable();
+    uint8_t data = 0x07;
+    MCP23017_Write(0x00, data);
+    data = 0x00;
+    MCP23017_Write(0x01, data);
+    MCP23017_Write(0x14, data);
+    MCP23017_Write(0x15, data);
     delay(100);
     PCD8544_Init();
-    MCP23017_Init();
     Init_Leds();
     Init_Parser();
     Init_Buttons();
@@ -94,6 +101,10 @@ int main(void)
             Led_Ticker(&led2, LED_TICK);
             Led_Ticker(&led3, LED_TICK);
             Led_Ticker(&led4, LED_TICK);
+            Led_Ticker(&led5, LED_TICK);
+            Led_Ticker(&led6, LED_TICK);
+            Led_Ticker(&led7, LED_TICK);
+            Led_Ticker(&led8, LED_TICK);
             Button_Ticker(&button1);
             Button_Ticker(&button2);
             Button_Ticker(&button3);
@@ -113,15 +124,13 @@ int main(void)
         if(UART2_IsRxReady()){
           AT_Ticker(&atCommandParserSingleton, UART2_Read());          
         }
+        MCP23017_Write(0x15, leds_register);
+        uint8_t buttons = MCP23017_Read(0x12);
+        button1_status = (buttons >> 0) & 1;
+        button2_status = (buttons >> 1) & 1;
+        button3_status = (buttons >> 2) & 1;
     }
     return 1; 
-}
-
-void MCP23017_Init(){
-    MCP23017_Read(0x00, &MCP23017_lat_a, 1);
-    MCP23017_Read(0x00, &MCP23017_lat_b, 1);
-    MCP23017_Read(0x00, &MCP23017_port_a, 1);
-    MCP23017_Read(0x00, &MCP23017_port_b, 1);
 }
 
 /**

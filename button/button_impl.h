@@ -16,6 +16,10 @@ extern "C" {
     extern bool button1_longPressed;
     extern bool button2_longPressed;
     
+    extern bool button1_status;
+    extern bool button2_status;
+    extern bool button3_status;  
+    
     void Button1_shortPressCallback(void);
     void Button1_longPressCallback(void);
     void Button1_releaseCallback(void);

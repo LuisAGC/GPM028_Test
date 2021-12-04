@@ -3,6 +3,14 @@
 #include "../menu/ledstate_menu_callback.h"
 #include "../menu/MicroMenu.h"
 
+static const char command_led_state_text1[] = "Led %d is now ";
+static const char command_led_pulse_text1[] = "Led %d pulse configuration changed\r\n";
+static const char command_led_pulse_text2[] = "Pulses Amount: %d\r\n";
+static const char command_led_pulse_text3[] = "Ticks Low: %d\r\n";
+static const char command_led_pulse_text4[] = "Ticks High: %d\r\n";
+static const char command_led_pulse_text5[] = "All Leds pulse configuration changed\r\n";
+static const char command_led_text1[] = "Led %d is OK\r\n";
+
 void Init_Parser(void){
     atCommandParserSingleton.callbackFn = commandSuccessfullyParsed;
     atCommandParserSingleton.errorCallbackFn = commandError;
@@ -27,40 +35,32 @@ void commandChangeLedState(Led *ledInstance, uint16_t state){
     }
 }
 
+static void commandLedState_Helper(uint16_t ledIndex, uint16_t ledStatus, Led * ledInstance){
+    printf(command_led_state_text1, ledIndex+1);
+    ledsCurrentState[0] = ledStatus;
+    commandChangeLedState(ledInstance, ledStatus);
+}
+
 void commandLedState(ATCommand *command){
     switch(command->modifierIndex){
         case 0:
             switch(command->data[0]){
                 case 1:
-                    printf("Led 1 is now ");
-                    led1CurrentState = command->data[1];
-                    commandChangeLedState(&led1, command->data[1]);
-                    break;
                 case 2:
-                    printf("Led 2 is now ");
-                    led2CurrentState = command->data[1];
-                    commandChangeLedState(&led2, command->data[1]);
-                    break;
                 case 3:
-                    printf("Led 3 is now ");
-                    led3CurrentState = command->data[1];
-                    commandChangeLedState(&led3, command->data[1]);
-                    break;
                 case 4:
-                    printf("Led 4 is now ");
-                    led4CurrentState = command->data[1];
-                    commandChangeLedState(&led4, command->data[1]);
-                    break;
                 case 5:
+                case 6:
+                case 7:
+                case 8:
+                    commandLedState_Helper(command->data[0]-1, command->data[1], leds[command->data[0]-1]);
+                    break;
+                case 9:
                     printf("All Leds are now:\r\n");
-                    led1CurrentState = command->data[1];
-                    led2CurrentState = command->data[1];
-                    led3CurrentState = command->data[1];
-                    led4CurrentState = command->data[1];
-                    commandChangeLedState(&led1, command->data[1]);
-                    commandChangeLedState(&led2, command->data[1]);
-                    commandChangeLedState(&led3, command->data[1]);
-                    commandChangeLedState(&led4, command->data[1]);
+                    for(uint16_t i = 0; i < 8; i++){
+                        ledsCurrentState[i] = command->data[1];
+                        commandChangeLedState(leds[i], command->data[1]);
+                    }
                     break;
                 default:
                     printf("Not an existing Led\r\n");
@@ -70,18 +70,16 @@ void commandLedState(ATCommand *command){
         case 1:
             switch(command->data[0]){
                 case 1:
-                    printf("Led 1 is OK\r\n");
-                    break;
                 case 2:
-                    printf("Led 2 is OK\r\n");
-                    break;
                 case 3:
-                    printf("Led 3 is OK\r\n");
-                    break;
                 case 4:
-                    printf("Led 4 is OK\r\n");
-                    break;
                 case 5:
+                case 6:
+                case 7:
+                case 8:
+                    printf(command_led_text1, command->data[0]);
+                    break;
+                case 9:
                     printf("All Leds are OK\r\n");
                     break;
                 default:
@@ -101,47 +99,36 @@ void commandChangeLedPulse(Led *ledInstance, uint16_t pulses, uint16_t pulseLow,
     ledInstance->pulseHighDurationTicks = pulseHigh;
 }
 
+static void commandLedPulse_Helper(uint16_t ledIndex, Led * ledInstance, uint16_t pulses, uint16_t pulseLow, uint16_t pulseHigh){
+    printf(command_led_pulse_text1, ledIndex);
+    printf(command_led_pulse_text2, pulses);
+    printf(command_led_pulse_text3, pulseLow);
+    printf(command_led_pulse_text4, pulseHigh);
+    commandChangeLedPulse(ledInstance, pulses, pulseLow, pulseHigh);
+}
+
 void commandLedPulse(ATCommand *command){
     switch(command->modifierIndex){
         case 0:
             switch(command->data[0]){
                 case 1:
-                    printf("Led 1 pulse configuration changed\r\n");
-                    printf("Pulses Amount: %d\r\n", command->data[1]);
-                    printf("Ticks Low: %d\r\n", command->data[2]);
-                    printf("Ticks High: %d\r\n", command->data[3]);
-                    commandChangeLedPulse(&led1, command->data[1], command->data[2], command->data[3]);
-                    break;
                 case 2:
-                    printf("Led 2 pulse configuration changed\r\n");                    
-                    printf("Pulses Amount: %d\r\n", command->data[1]);
-                    printf("Ticks Low: %d\r\n", command->data[2]);
-                    printf("Ticks High: %d\r\n", command->data[3]);
-                    commandChangeLedPulse(&led2, command->data[1], command->data[2], command->data[3]);
-                    break;
                 case 3:
-                    printf("Led 3 pulse configuration changed\r\n");
-                    printf("Pulses Amount: %d\r\n", command->data[1]);
-                    printf("Ticks Low: %d\r\n", command->data[2]);
-                    printf("Ticks High: %d\r\n", command->data[3]);
-                    commandChangeLedPulse(&led3, command->data[1], command->data[2], command->data[3]);
-                    break;
                 case 4:
-                    printf("Led 4 pulse configuration changed\r\n");
-                    printf("Pulses Amount: %d\r\n", command->data[1]);
-                    printf("Ticks Low: %d\r\n", command->data[2]);
-                    printf("Ticks High: %d\r\n", command->data[3]);
-                    commandChangeLedPulse(&led4, command->data[1], command->data[2], command->data[3]);
-                    break;    
-                case 5:
-                    printf("All Leds pulse configuration changed\r\n");
-                    printf("Pulses Amount: %d\r\n", command->data[1]);
-                    printf("Ticks Low: %d\r\n", command->data[2]);
-                    printf("Ticks High: %d\r\n", command->data[3]);
-                    commandChangeLedPulse(&led1, command->data[1], command->data[2], command->data[3]);
-                    commandChangeLedPulse(&led2, command->data[1], command->data[2], command->data[3]);
-                    commandChangeLedPulse(&led3, command->data[1], command->data[2], command->data[3]);
-                    commandChangeLedPulse(&led4, command->data[1], command->data[2], command->data[3]);
+                case 5:  
+                case 6:
+                case 7:
+                case 8:
+                    commandLedPulse_Helper(command->data[0], leds[command->data[0]-1], command->data[1], command->data[2], command->data[3]);
+                    break;
+                case 9:
+                    printf(command_led_pulse_text5);
+                    printf(command_led_pulse_text2, command->data[1]);
+                    printf(command_led_pulse_text3, command->data[2]);
+                    printf(command_led_pulse_text4, command->data[3]);
+                    for(uint16_t i = 0; i < 8; i++){
+                        commandChangeLedPulse(leds[i], command->data[1], command->data[2], command->data[3]);
+                    }
                     break;
                 default:
                     printf("Not an existing Led\r\n");
@@ -151,18 +138,16 @@ void commandLedPulse(ATCommand *command){
         case 1:
             switch(command->data[0]){
                 case 1:
-                    printf("Led 1 is OK\r\n");
-                    break;
                 case 2:
-                    printf("Led 2 is OK\r\n");
-                    break;
                 case 3:
-                    printf("Led 3 is OK\r\n");
-                    break;
                 case 4:
-                    printf("Led 4 is OK\r\n");
-                    break;
                 case 5:
+                case 6:
+                case 7:
+                case 8:
+                    printf(command_led_text1, command->data[0]);
+                    break;
+                case 9:
                     printf("All Leds are OK\r\n");
                     break;
                 default:

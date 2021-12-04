@@ -51,13 +51,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "i2c2.h"
+#include "spi2.h"
 #include "watchdog.h"
-#include "uart2.h"
 #include "interrupt_manager.h"
 #include "exceptions.h"
-#include "spi2.h"
 #include "coretimer.h"
+#include "uart2.h"
+#include "i2c2.h"
 #include "sccp4_compare.h"
 
 #warning "This file will be removed in future MCC releases. Use system.h instead."

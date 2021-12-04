@@ -10,6 +10,10 @@ extern "C" {
     void LedPulse_2_Draw(void);
     void LedPulse_3_Draw(void);
     void LedPulse_4_Draw(void);
+    void LedPulse_5_Draw(void);
+    void LedPulse_6_Draw(void);
+    void LedPulse_7_Draw(void);
+    void LedPulse_8_Draw(void);
     
     void LedPulse_1_PulseHigh_Draw(void);
     void LedPulse_1_PulseLow_Draw(void);
@@ -27,6 +31,22 @@ extern "C" {
     void LedPulse_4_PulseLow_Draw(void);
     void LedPulse_4_Pulses_Draw(void);
 
+    void LedPulse_5_PulseHigh_Draw(void);
+    void LedPulse_5_PulseLow_Draw(void);
+    void LedPulse_5_Pulses_Draw(void);
+    
+    void LedPulse_6_PulseHigh_Draw(void);
+    void LedPulse_6_PulseLow_Draw(void);
+    void LedPulse_6_Pulses_Draw(void);
+    
+    void LedPulse_7_PulseHigh_Draw(void);
+    void LedPulse_7_PulseLow_Draw(void);
+    void LedPulse_7_Pulses_Draw(void);
+    
+    void LedPulse_8_PulseHigh_Draw(void);
+    void LedPulse_8_PulseLow_Draw(void);
+    void LedPulse_8_Pulses_Draw(void);
+    
     void LedPulse_1_PulseHighInc(void);
     void LedPulse_1_PulseLowInc(void);
     void LedPulse_1_PulsesInc(void);
@@ -54,6 +74,34 @@ extern "C" {
     void LedPulse_4_PulseHighDec(void);
     void LedPulse_4_PulseLowDec(void);
     void LedPulse_4_PulsesDec(void);
+    
+    void LedPulse_5_PulseHighInc(void);
+    void LedPulse_5_PulseLowInc(void);
+    void LedPulse_5_PulsesInc(void);
+    void LedPulse_5_PulseHighDec(void);
+    void LedPulse_5_PulseLowDec(void);
+    void LedPulse_5_PulsesDec(void);
+    
+    void LedPulse_6_PulseHighInc(void);
+    void LedPulse_6_PulseLowInc(void);
+    void LedPulse_6_PulsesInc(void);
+    void LedPulse_6_PulseHighDec(void);
+    void LedPulse_6_PulseLowDec(void);
+    void LedPulse_6_PulsesDec(void);
+    
+    void LedPulse_7_PulseHighInc(void);
+    void LedPulse_7_PulseLowInc(void);
+    void LedPulse_7_PulsesInc(void);
+    void LedPulse_7_PulseHighDec(void);
+    void LedPulse_7_PulseLowDec(void);
+    void LedPulse_7_PulsesDec(void);
+    
+    void LedPulse_8_PulseHighInc(void);
+    void LedPulse_8_PulseLowInc(void);
+    void LedPulse_8_PulsesInc(void);
+    void LedPulse_8_PulseHighDec(void);
+    void LedPulse_8_PulseLowDec(void);
+    void LedPulse_8_PulsesDec(void);
     
 #ifdef	__cplusplus
 }
